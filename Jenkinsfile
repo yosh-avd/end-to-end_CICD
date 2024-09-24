@@ -12,10 +12,10 @@ pipeline {
             steps {
                 echo "----------- build started -----------"
                 sh 'mvn clean package -Dmaven.test.skip=true'
-                echo "----------- build completed ----------"
+                echo "----------- build completed -----------"
             }
         }
-    stage('SonarQube analysis') {
+        stage('SonarQube analysis') {
             environment {
                 scannerHome = tool 'sonar-scanner-meportal'  
             }
@@ -26,7 +26,7 @@ pipeline {
             }
         }
            
-    stage("Quality Gate"){
+        stage("Quality Gate"){
             steps {
                 script {
                     timeout(time: 1, unit: 'HOURS') { 
@@ -37,7 +37,6 @@ pipeline {
                     }
                 }
             }
-        }
-    
+        } 
     }
 }
