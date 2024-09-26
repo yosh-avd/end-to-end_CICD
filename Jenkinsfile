@@ -8,23 +8,23 @@ pipeline {
         PATH = "/opt/apache-maven-3.9.6/bin:$PATH"
     }
     stages {
-            stage("build code"){
-                steps {
-                  echo "----------- build started -----------"
-                  sh 'mvn clean deploy -Dmaven.test.skip=true'
-                  echo "----------- build completed -----------"
-               }
-           }
-          
-            stage("test stage"){
-                steps{
-                   echo "----------- unit test started ---------------"
-                   sh 'mvn surefire-report:report'
-                   echo "------------unit test Completed -----------------"
-                }
+        stage("build code"){
+            steps {
+                echo "----------- build started -----------"
+                sh 'mvn clean deploy -Dmaven.test.skip=true'
+                echo "----------- build completed -----------"
             }
+        }
+          
+        stage("test stage"){
+                steps{
+                    echo "----------- unit test started ---------------"
+                    sh 'mvn surefire-report:report'
+                    echo "------------unit test Completed -----------------"
+            }
+        }
                
-            stage('SonarQube analysis') {
+        stage('SonarQube analysis') {
                 environment {
                     scannerHome = tool 'sonar-scanner-meportal'
             }
@@ -34,7 +34,7 @@ pipeline {
                 }
             }
         }
-            stage("Quality Gate"){
+        stage("Quality Gate"){
                 steps {
                     script {
                         timeout(time: 1, unit: 'HOURS') { 
@@ -46,7 +46,8 @@ pipeline {
                 }
             }
         }           
-            stage("Artifact Publish") {
+        
+        stage("Artifact Publish") {
                 steps {
                     script {
                         echo '------------- Artifact Publish Started ------------'
@@ -71,9 +72,34 @@ pipeline {
                     }
                     
                 }
-            }   
+            } 
+        stage(" Create Docker Image ") {
+            steps {
+                script {
+                    echo '-------------- Docker Build Started -------------'
+                    app = docker.build("meportal1995.jfrog.io/meportal-docker-local/myapp:1.0.1")
+                    echo '-------------- Docker Build Ended -------------'
+                }
+            }
+        }
+
+        stage (" Docker Publish "){
+            steps {
+                script {
+                        echo '---------- Docker Publish Started --------'  
+                        docker.withRegistry("https://meportal1995.jfrog.io", 'jfrog-cred'){
+                        app.push()
+                        echo '------------ Docker Publish Ended ---------'  
+                    }    
+                }
+            }
         }
     }
+}
+
+
+
+
 
  
 
