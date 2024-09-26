@@ -73,10 +73,11 @@ pipeline {
                     
                 }
             } 
+
         stage(" Create Docker Image ") {
             steps {
                 script {
-                    echo '-------------- Docker Build Started -------------'
+                    echo '-------------- Docker Build Started --------------'
                     app = docker.build("meportal1995.jfrog.io/meportal-docker-local/myapp:1.0.1")
                     echo '-------------- Docker Build Ended -------------'
                 }
