@@ -90,7 +90,7 @@ pipeline {
                         echo '---------- Docker Publish Started --------'  
                         docker.withRegistry("https://meportal1995.jfrog.io", 'jfrog-cred'){
                         app.push()
-                        echo '------------ Docker Publish Ended ---------'  
+                        echo '------------ Docker Publish Ended ----------'  
                     }    
                 }
             }
