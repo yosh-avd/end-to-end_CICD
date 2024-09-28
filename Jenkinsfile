@@ -23,6 +23,14 @@ pipeline {
                     echo "------------unit test Completed -----------------"
             }
         }
+       stage('OWASP Dependency Check') {
+            steps {
+                 dependencyCheck additionalArguments: ' ', odcInstallation: 'DP-check'
+                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+
+
                
         stage('SonarQube analysis') {
                 environment {
