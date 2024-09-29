@@ -76,9 +76,7 @@ pipeline {
                          buildInfo.env.collect()
                          server.publishBuildInfo(buildInfo)
                         echo '------------ Artifact Publish Ended -----------'  
-                        
                 }
-                    
             }
         } 
 
