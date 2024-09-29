@@ -22,8 +22,7 @@ pipeline {
                     sh 'mvn surefire-report:report'
                     echo "------------unit test Completed ------------------"
             }
-        }
-      
+        }  
 
         stage('OWASP Dependency Check') {
                 steps {
@@ -31,8 +30,6 @@ pipeline {
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-
-
                
         stage('SonarQube analysis') {
                 environment {
@@ -44,6 +41,7 @@ pipeline {
                 }
             }
         }
+
         stage("Quality Gate"){
                 steps {
                     script {
@@ -79,10 +77,10 @@ pipeline {
                          server.publishBuildInfo(buildInfo)
                         echo '------------ Artifact Publish Ended -----------'  
                         
-                    }
-                    
                 }
-            } 
+                    
+            }
+        } 
 
         stage(" Create Docker Image ") {
             steps {
@@ -105,12 +103,12 @@ pipeline {
                 }
             }
         }
+
         stage('Trivy') {
                 steps {
                     sh "trivy image meportal1995.jfrog.io/meportal-docker-local/myapp:1.0.1"
             }
         }
-
 
         stage(" Deploy ") {
             steps {
