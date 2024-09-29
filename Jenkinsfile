@@ -105,6 +105,13 @@ pipeline {
                 }
             }
         }
+        stage('Trivy') {
+                steps {
+                    sh "trivy image meportal1995.jfrog.io/meportal-docker-local/myapp:1.0.1"
+            }
+        }
+
+
         stage(" Deploy ") {
             steps {
                 script {
